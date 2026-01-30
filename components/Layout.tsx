@@ -22,16 +22,26 @@ const Navbar: React.FC = () => {
     { name: 'Contact', path: '/contact' },
   ];
 
+  // LOGIC: Check if we are on the Home page or the Qualified page
   const isHome = location.pathname === '/';
+  const isQualified = location.pathname === '/qualified';
 
   return (
-    <nav className={`fixed w-full z-50 transition-all duration-500 ${isScrolled ? 'bg-white/90 backdrop-blur-md shadow-sm py-4' : 'bg-transparent py-8'}`}>
+    // Added z-[100] and isolate to ensure buttons are ALWAYS clickable
+    <nav className={`fixed w-full z-[100] isolate transition-all duration-500 ${
+      isScrolled 
+        ? 'bg-white/90 backdrop-blur-md shadow-sm py-4' 
+        : 'bg-transparent py-8'
+    }`}>
       <div className="container mx-auto px-6 flex justify-between items-center">
         <Link to="/" className="flex items-center space-x-3 group">
           <div className="w-10 h-10 bg-emerald-500 rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-all">
              <i className="fas fa-sun text-white text-sm"></i>
           </div>
-          <span className={`text-2xl font-black tracking-tighter ${!isScrolled && isHome ? 'text-white' : 'text-gray-900'}`}>
+          <span className={`text-2xl font-black tracking-tighter ${
+            // If on Qualified page or Home (while not scrolled), use white text
+            (!isScrolled && (isHome || isQualified)) ? 'text-white' : 'text-gray-900'
+          }`}>
             <span className="text-emerald-500">Solar</span><span className="text-yellow-400">lite</span>
           </span>
         </Link>
@@ -42,7 +52,8 @@ const Navbar: React.FC = () => {
               key={link.path}
               to={link.path}
               className={`text-sm font-black uppercase tracking-widest transition-colors hover:text-emerald-500 ${
-                !isScrolled && isHome ? 'text-white' : 'text-gray-500'
+                // Improved logic for text color visibility
+                (!isScrolled && (isHome || isQualified)) ? 'text-white' : 'text-gray-500'
               } ${location.pathname === link.path ? 'text-emerald-500' : ''}`}
             >
               {link.name}
@@ -112,7 +123,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
         <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center text-gray-500 text-xs font-black uppercase tracking-[0.3em]">
-          <span>© 2025 <span className="text-emerald-500">Solar</span><span className="text-yellow-400">lite</span> Inc.</span>
+          <span>© 2026 <span className="text-emerald-500">Solar</span><span className="text-yellow-400">lite</span> Inc.</span>
           <div className="flex space-x-10 mt-6 md:mt-0">
              <span>Crafted with Purpose</span>
              <span>Palo Alto, CA</span>
@@ -125,7 +136,8 @@ const Footer: React.FC = () => {
 
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    // Changed bg-white to an overflow-x-hidden container
+    <div className="min-h-screen flex flex-col bg-white overflow-x-hidden">
       <Navbar />
       <main className="flex-grow">
         {children}
